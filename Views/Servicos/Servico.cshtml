@@ -1,0 +1,81 @@
+﻿@model IEnumerable<ComoFazerCrud.Models.Servicos>
+
+@{
+    ViewData["Title"] = "Servicos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h1>Servico</h1>
+
+<div class="create-servico">
+    <a asp-action="Create" class="btn btn-success">Criar serviço</a>
+</div>
+
+@if (Model != null && Model.Any()) // Verifica se Model não é nulo e tem pelo menos um item
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Ordem)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Valor)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DataDeEntrega)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Pago)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Modelo)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ordem)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Valor)
+                    </td>
+                    <td>
+                        @{
+                            string formattedDate = item.DataDeEntrega.ToString("dd/MM/yyyy");
+                        }
+                        @Html.DisplayFor(modelItem => formattedDate)
+                    </td>
+                    <td>
+                        @if (item.Pago)
+                        {
+                            <text>Sim</text>
+                        }
+                        else
+                        {
+                            <text>Não</text>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Modelo)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Nenhum dado disponível.</p>
+}
+

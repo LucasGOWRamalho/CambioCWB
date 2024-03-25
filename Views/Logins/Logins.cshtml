@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ComoFazerCrud.Models.Login>
+
+@{
+    ViewData["Title"] = "Logins";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center mb-4">Logins</h1>
+
+<div class="create-login text-center mb-4">
+    <a asp-action="Create" class="btn btn-success">Criar Novo Login</a>
+</div>
+
+<div class="login-list">
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Senha</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Senha)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Cliente)</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm mr-2">Detalhes</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Excluir</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-center">Nenhum dado disponível.</p>
+    }
+</div>

@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Index";
+   Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h1>CambiosCWB</h1>
+
+<div class="index-links">
+    <a asp-controller="Servicos" asp-action="Index" class="btn btn-primary">Demanda</a>
+    <a asp-controller="Publicacao" asp-action="Index" class="btn btn-primary">Catálogo</a>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulário de login -->
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Senha</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a asp-controller="Logins" asp-action="Index" class="btn btn-primary">Criar login</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+               @* <button type="button" class="btn btn-primary" onclick="submitLoginForm()">Entrar</button> *@
+                <button type="submit" class="btn btn-primary">Entrar</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function submitLoginForm() {
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+
+        // Enviar os dados do formulário para o servidor
+        $.ajax({
+            url: '/Login/VerifyLogin', // URL do método de verificação no controller Login
+            type: 'POST',
+            data: { email: email, password: password },
+            success: function (response) {
+                if (response === true) {
+                    // Se as credenciais forem válidas, redirecione para a página de publicações
+                    window.location.href = '/Publicacao/Index';
+                } else {
+                    alert('Credenciais inválidas. Por favor, tente novamente.');
+                }
+            }
+        });
+    }
+</script>
+
