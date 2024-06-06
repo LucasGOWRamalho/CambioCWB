@@ -1,8 +1,9 @@
-﻿@{
-    ViewData["Title"] = "Index";
-   Layout = "~/Views/Shared/_Layout.cshtml";
-}
+@model IEnumerable<ComoFazerCrud.Models.Publicacao>
 
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 <h1>CambiosCWB</h1>
 
@@ -12,7 +13,7 @@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
 </div>
 
-<!-- Modal -->
+<!-- Modal de Login -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -36,32 +37,70 @@
             <div class="modal-footer">
                 <a asp-controller="Logins" asp-action="Index" class="btn btn-primary">Criar login</a>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-               @* <button type="button" class="btn btn-primary" onclick="submitLoginForm()">Entrar</button> *@
-                <button type="submit" class="btn btn-primary">Entrar</button>
-
+                <button type="submit" class="btn btn-primary" onclick="submitLoginForm()">Entrar</button>
             </div>
         </div>
     </div>
 </div>
-<script>
-    function submitLoginForm() {
-        var email = document.getElementById('email').value;
-        var password = document.getElementById('password').value;
 
-        // Enviar os dados do formulário para o servidor
-        $.ajax({
-            url: '/Login/VerifyLogin', // URL do método de verificação no controller Login
-            type: 'POST',
-            data: { email: email, password: password },
-            success: function (response) {
-                if (response === true) {
-                    // Se as credenciais forem válidas, redirecione para a página de publicações
-                    window.location.href = '/Publicacao/Index';
-                } else {
-                    alert('Credenciais inválidas. Por favor, tente novamente.');
-                }
-            }
-        });
+<!-- Seção do Catálogo de Publicações -->
+<h2>Catálogo de Publicações</h2>
+
+<div class="create-publicacao">
+    <a asp-controller="Publicacao" asp-action="Create" class="btn btn-success">Criar Nova Publicação</a>
+</div>
+
+<div class="publicacao-list">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var item in Model)
+        {
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="publicacao-item">
+                        <img src="@item.Imagem" alt="@item.Name" class="img-fluid">
+                        <div class="publicacao-details">
+                            <h3>@Html.DisplayFor(modelItem => item.Name)</h3>
+                            <p>Valor: @Html.DisplayFor(modelItem => item.Valor)</p>
+                            <p>Quantidade: @Html.DisplayFor(modelItem => item.Quantidade)</p>
+                        </div>
+                        <div class="publicacao-actions">
+                            <a asp-controller="Publicacao" asp-action="Buy" asp-route-id="@item.Id" class="btn btn-primary">Comprar</a>
+                            <a asp-controller="Publicacao" asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Detalhes</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     }
-</script>
+    else
+    {
+        <p>Nenhuma publicação disponível.</p>
+    }
+</div>
 
+@section Scripts {
+    <script src="~/js/publicacao.js"></script>
+    <!-- Outros scripts específicos da página Index.cshtml -->
+    <script>
+        function submitLoginForm() {
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+
+            // Enviar os dados do formulário para o servidor
+            $.ajax({
+                url: '/Login/VerifyLogin', // URL do método de verificação no controller Login
+                type: 'POST',
+                data: { email: email, password: password },
+                success: function (response) {
+                    if (response === true) {
+                        // Se as credenciais forem válidas, redirecione para a página de publicações
+                        window.location.href = '/Publicacao/Index';
+                    } else {
+                        alert('Credenciais inválidas. Por favor, tente novamente.');
+                    }
+                }
+            });
+        }
+    </script>
+}
